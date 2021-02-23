@@ -1,12 +1,17 @@
 package guru.springframework.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+/**
+ * Created by jt on 6/13/17.
+ */
+@Getter
+@Setter
 @Entity
 public class Recipe {
 
@@ -38,13 +43,15 @@ public class Recipe {
 
     @ManyToMany
     @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-                inverseJoinColumns = @JoinColumn(name = "category_id"))
+        joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {
-        this.notes = notes;
-        notes.setRecipe(this);
+        if (notes != null) {
+            this.notes = notes;
+            notes.setRecipe(this);
+        }
     }
 
     public Recipe addIngredient(Ingredient ingredient){
@@ -52,5 +59,4 @@ public class Recipe {
         this.ingredients.add(ingredient);
         return this;
     }
-
 }
